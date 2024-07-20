@@ -2,6 +2,8 @@ const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+require("dotenv").config(); // Add this line at the top of your file
+
 exports.resetPasswordToken = async (req, res) => {
   try {
     const email = req.body.email;
@@ -24,8 +26,9 @@ exports.resetPasswordToken = async (req, res) => {
     );
     console.log("DETAILS", updatedDetails);
 
-    // const url = `http://localhost:3000/update-password/${token}`;
-    const url = `https://studynotion.vercel.app/update-password/${token}`;
+    // Use environment variable for the frontend URL
+    const frontendUrl = process.env.FRONTEND_URL;
+    const url = `${frontendUrl}/update-password/${token}`;
 
     await mailSender(
       email,
@@ -46,6 +49,7 @@ exports.resetPasswordToken = async (req, res) => {
     });
   }
 };
+
 
 exports.resetPassword = async (req, res) => {
   try {
